@@ -143,6 +143,5 @@ print("End of Question 2.7")
 
 #BONUS QUESTION
 
-path = ""
 
 

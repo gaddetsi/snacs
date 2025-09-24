@@ -4,17 +4,17 @@ import matplotlib.pyplot as plt
 from collections import Counter
 
 #read the edgelist from medium and large datasets
-G_medium = nx.read_edgelist('snacs2025-student4251938-medium.tsv', create_using=nx.DiGraph(), delimiter='\t')
-G_large = nx.read_edgelist('snacs2025-student4251938-large.tsv', create_using=nx.DiGraph(), delimiter='\t')
+#G_medium = nx.read_edgelist('snacs2025-student4251938-medium.tsv', create_using=nx.DiGraph(), delimiter='\t')
+#G_large = nx.read_edgelist('snacs2025-student4251938-large.tsv', create_using=nx.DiGraph(), delimiter='\t')
 #print number of edges in both datasets
-print(len(G_medium.edges()), "edges in medium dataset")
-print(len(G_large.edges()), "edges in large dataset")
+#print(len(G_medium.edges()), "edges in medium dataset")
+#print(len(G_large.edges()), "edges in large dataset")
 print("End of Question 2.1")
 
-num_nodes_medium = G_medium.number_of_nodes()
-num_nodes_large = G_large.number_of_nodes()
-print(f"Number of nodes in medium dataset: {num_nodes_medium}")
-print(f"Number of nodes in large dataset: {num_nodes_large}")
+#num_nodes_medium = G_medium.number_of_nodes()
+#num_nodes_large = G_large.number_of_nodes()
+#print(f"Number of nodes in medium dataset: {num_nodes_medium}")
+#print(f"Number of nodes in large dataset: {num_nodes_large}")
 print("End of Question 2.2")
 
 #indegree and outdegree
@@ -42,10 +42,10 @@ def plot_degree_distributions(Graph, dataset):
     plt.savefig(f'degree_distribution_{dataset}.png')
     plt.show()
 
-print("Plotting degree distributions...")
+#print("Plotting degree distributions...")
 #plot_degree_distributions(G_medium, 'snacs2025-student4251938-medium')
 #plot_degree_distributions(G_large, 'snacs2025-student4251938-large')
-print("End of Question 2.3")
+#print("End of Question 2.3")
 
 #strongly and weekly connected components
 
@@ -75,26 +75,26 @@ def get_component_values(graph):
     }
 
 # Analyze
-medium_stats = get_component_values(G_medium)
-large_stats = get_component_values(G_large)
+#medium_stats = get_component_values(G_medium)
+#large_stats = get_component_values(G_large)
 
 print("Medium Dataset:")
-print(medium_stats)
+#print(medium_stats)
 print("\nLarge Dataset:")
-print(large_stats)
+#print(large_stats)
 print("End of Question 2.4")
 
 #average clustering coefficient
 # Convert to undirected for clustering approximation
-G_medium_undirected = G_medium.to_undirected()
-G_large_undirected = G_large.to_undirected()
+#G_medium_undirected = G_medium.to_undirected()
+#G_large_undirected = G_large.to_undirected()
 
 # Compute average clustering coefficient
-clustering_medium = nx.average_clustering(G_medium_undirected)
-clustering_large = nx.average_clustering(G_large_undirected)
+#clustering_medium = nx.average_clustering(G_medium_undirected)
+#clustering_large = nx.average_clustering(G_large_undirected)
 
-print("Medium Dataset - Avg Clustering Coefficient:", clustering_medium)
-print("Large Dataset - Avg Clustering Coefficient:", clustering_large)
+#print("Medium Dataset - Avg Clustering Coefficient:", clustering_medium)
+#print("Large Dataset - Avg Clustering Coefficient:", clustering_large)
 print("End of Question 2.5")
 
 #distance distribution for largest weekly conneceted componenets
@@ -129,19 +129,59 @@ def plot_distance_distribution(graph, dataset):
 print("End of Question 2.6")
 
 # Largest WCC
-largest_wcc_medium = G_medium_undirected.subgraph(max(nx.weakly_connected_components(G_medium), key=len))
-largest_wcc_large = G_large_undirected.subgraph(max(nx.weakly_connected_components(G_large), key=len))
+#largest_wcc_medium = G_medium_undirected.subgraph(max(nx.weakly_connected_components(G_medium), key=len))
+#largest_wcc_large = G_large_undirected.subgraph(max(nx.weakly_connected_components(G_large), key=len))
 
 # Average shortest path length
-avg_distance_medium = nx.average_shortest_path_length(largest_wcc_medium)
-avg_distance_large = nx.average_shortest_path_length(largest_wcc_large)
+#avg_distance_medium = nx.average_shortest_path_length(largest_wcc_medium)
+#avg_distance_large = nx.average_shortest_path_length(largest_wcc_large)
 
-print("Medium dataset - Avg Distance:", avg_distance_medium)
-print("Large dataset - Avg Distance:", avg_distance_large)
+#print("Medium dataset - Avg Distance:", avg_distance_medium)
+#print("Large dataset - Avg Distance:", avg_distance_large)
 print("End of Question 2.7")
 
 
 #BONUS QUESTION
+print("Bonus Question - Huge Dataset Analysis")
+path = "/vol/share/groups/liacs/scratch/SNACS/huge.tsv"
+
+Huge_G = nx.read_edgelist(path, create_using=nx.DiGraph(), delimiter='\t')
+print(len(Huge_G.edges()), "edges in huge dataset")
+print("End of Question 2.1 for bonus")
+
+num_nodes_huge = Huge_G.number_of_nodes()
+print(f"Number of nodes in Huge dataset: {num_nodes_huge}")
+print("End of Question 2.2 for bonus")
 
 
+print("Plotting degree distributions...")
+plot_degree_distributions(Huge_G, path)
+print("End of Question 2.3 for bonus")
 
+Huge_stats = get_component_values(Huge_G)
+print("Huge Dataset stats:")
+print("End of Question 2.4")
+
+#average clustering coefficient
+# Convert to undirected for clustering approximation
+Huge_G_undirected = Huge_G.to_undirected()
+
+# Compute average clustering coefficient
+clustering_Huge_G = nx.average_clustering(Huge_G_undirected)
+
+
+print("Huge Dataset - Avg Clustering Coefficient:", clustering_Huge_G)
+print("End of Question 2.5")
+
+
+plot_distance_distribution(Huge_G, 'snacs2025-student4251938-medium.tsv')
+print("End of Question 2.6")
+
+# Largest WCC
+largest_wcc_Huge = Huge_G_undirected.subgraph(max(nx.weakly_connected_components(Huge_G), key=len))
+
+# Average shortest path length
+avg_distance_Huge = nx.average_shortest_path_length(largest_wcc_Huge)
+
+print("Medium dataset - Avg Distance:", avg_distance_Huge)
+print("End of Question 2.7")

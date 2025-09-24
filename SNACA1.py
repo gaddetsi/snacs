@@ -125,6 +125,24 @@ def plot_distance_distribution(graph, dataset):
 
 
 #plot_distance_distribution(G_medium, 'snacs2025-student4251938-medium.tsv')
-plot_distance_distribution(G_large, 'snacs2025-student4251938-large.tsv')
+#plot_distance_distribution(G_large, 'snacs2025-student4251938-large.tsv')
 print("End of Question 2.6")
+
+# Largest WCC
+largest_wcc_medium = G_medium_undirected.subgraph(max(nx.weakly_connected_components(G_medium), key=len))
+largest_wcc_large = G_large_undirected.subgraph(max(nx.weakly_connected_components(G_large), key=len))
+
+# Average shortest path length
+avg_distance_medium = nx.average_shortest_path_length(largest_wcc_medium)
+avg_distance_large = nx.average_shortest_path_length(largest_wcc_large)
+
+print("Medium dataset - Avg Distance:", avg_distance_medium)
+print("Large dataset - Avg Distance:", avg_distance_large)
+print("End of Question 2.7")
+
+
+#BONUS QUESTION
+
+path = ""
+
 

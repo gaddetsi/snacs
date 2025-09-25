@@ -1,3 +1,4 @@
+
 #import library
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -204,26 +205,46 @@ path = "/vol/share/groups/liacs/scratch/SNACS/huge.tsv"
 # print("End of Question 2.3")
 # --- Question 2.4: Connected components (sampling, huge dataset) ---
 
-# Load huge dataset as igraph (if not already loaded)
-g_huge = ig.Graph.Read_Edgelist(path, directed=True)
+# --- Question 2.4: Sampling-based component analysis for huge dataset ---
+import igraph as ig
+import random
 
-# Sample a subset of nodes for component analysis
-sample_size = 1000  # Adjust for memory/accuracy
-all_nodes = list(range(g_huge.vcount()))
-sample_nodes = random.sample(all_nodes, min(sample_size, len(all_nodes)))
+# Parameters for sampling
+sample_size = 10000  # Number of edges to sample
+sampled_edges = []
+total_edges = 0
 
-# Weakly connected components
-weak_components = g_huge.clusters(mode="weak")
+# First, count total edges
+with open(path, "r") as f:
+	for _ in f:
+		total_edges += 1
+
+# Randomly select line numbers to sample
+sample_indices = set(random.sample(range(total_edges), min(sample_size, total_edges)))
+
+# Read and collect sampled edges
+with open(path, "r") as f:
+	for idx, line in enumerate(f):
+		if idx in sample_indices:
+			src, dst = line.strip().split("\t")[:2]
+			sampled_edges.append((src, dst))
+
+# Build igraph from sampled edges
+g_sample = ig.Graph(directed=True)
+nodes = set([src for src, dst in sampled_edges] + [dst for src, dst in sampled_edges])
+g_sample.add_vertices(list(nodes))
+g_sample.add_edges(sampled_edges)
+
+# Analyze components
+weak_components = g_sample.clusters(mode="weak")
 num_weak = len(weak_components)
 largest_weak = weak_components.giant()
-print(f"Number of weakly connected components (huge): {num_weak}")
-print(f"Largest weakly connected component (huge): {largest_weak.vcount()} nodes, {largest_weak.ecount()} edges")
+print(f"Sampled: Number of weakly connected components: {num_weak}")
+print(f"Sampled: Largest weakly connected component: {largest_weak.vcount()} nodes, {largest_weak.ecount()} edges")
 
-# Strongly connected components (sampled)
-strong_components = g_huge.clusters(mode="strong")
+strong_components = g_sample.clusters(mode="strong")
 num_strong = len(strong_components)
 largest_strong = strong_components.giant()
-print(f"Number of strongly connected components (huge): {num_strong}")
-print(f"Largest strongly connected component (huge): {largest_strong.vcount()} nodes, {largest_strong.ecount()} edges")
-print("End of Question 2.4")
-
+print(f"Sampled: Number of strongly connected components: {num_strong}")
+print(f"Sampled: Largest strongly connected component: {largest_strong.vcount()} nodes, {largest_strong.ecount()} edges")
+print("End of Question 2.4 (sampled)")

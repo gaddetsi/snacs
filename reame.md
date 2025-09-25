@@ -1,5 +1,16 @@
 Number of edges: 912118714
 Number of unique nodes: 8112742
+
+/vol/home/s4251938/Desktop/snacs/ass1/snacs/SNACA1.py:239: DeprecationWarning: Graph.clusters() is deprecated; use Graph.connected_components() instead
+  weak_components = g_sample.clusters(mode="weak")
+Sampled: Number of weakly connected components: 9832
+Sampled: Largest weakly connected component: 8 nodes, 7 edges
+/vol/home/s4251938/Desktop/snacs/ass1/snacs/SNACA1.py:245: DeprecationWarning: Graph.clusters() is deprecated; use Graph.connected_components() instead
+  strong_components = g_sample.clusters(mode="strong")
+Sampled: Number of strongly connected components: 19832
+Sampled: Largest strongly connected component: 1 nodes, 0 edges
+End of Question 2.4 (sampled)
+
 # g = ig.Graph.Read_Edgelist(path, directed=True)
 
 # print(f"Number of edges: {g.ecount()}")

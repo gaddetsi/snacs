@@ -150,64 +150,54 @@ import igraph as ig
 import random
 
 
-# print("Starting analysis of the huge dataset...")
+print("Starting analysis of the huge dataset...")
 # # Load the huge dataset
 path = "/vol/share/groups/liacs/scratch/SNACS/huge.tsv"
 
 
-#nique_nodes = set()
-# with open(path, "r") as f:
-#     num_edges = 0
-#     for line in f:
-#         num_edges += 1
-#         # Extract unique nodes from each line
-#         src, dst = line.strip().split("\t")[:2]
-#         unique_nodes.add(src)
-#         unique_nodes.add(dst)
+in_degree = defaultdict(int)
+out_degree = defaultdict(int)
+unique_nodes = set()
+num_edges = 0
 
-# print(f"Number of edges: {num_edges}")
-# print(f"Number of unique nodes: {len(unique_nodes)}")
-# --- Question 2.3: In-degree and out-degree distributions for huge dataset ---
-# in_degree = defaultdict(int)
-# out_degree = defaultdict(int)
-# unique_nodes = set()
-# num_edges = 0
+with open(path, "r") as f:
+    num_edges = 0
+    for line in f:
+        num_edges += 1
+        # Extract unique nodes from each line
+        src, dst = line.strip().split("\t")[:2]
+        unique_nodes.add(src)
+        unique_nodes.add(dst)
+        out_degree[src] += 1
+        in_degree[dst] += 1
+		
 
-# with open(path, "r") as f:
-#     for line in f:
-#         num_edges += 1
-#         src, dst = line.strip().split("\t")[:2]
-#         out_degree[src] += 1
-#         in_degree[dst] += 1
-#         unique_nodes.add(src)
-#         unique_nodes.add(dst)
+print(f"Number of edges: {num_edges}")
+print(f"Number of unique nodes: {len(unique_nodes)}")
+print("End of Question 2.1 and 2.2")
 
-# # Prepare degree lists
-# in_degrees = [in_degree[node] for node in unique_nodes]
-# out_degrees = [out_degree[node] for node in unique_nodes]
+# Prepare degree lists
+in_degrees = [in_degree[node] for node in unique_nodes]
+out_degrees = [out_degree[node] for node in unique_nodes]
 
-# plt.figure(figsize=(12, 5))
-# plt.subplot(1, 2, 1)
-# plt.hist(in_degrees, bins=50, log=True, color='skyblue', edgecolor='black')
-# plt.title('In-Degree Distribution (huge dataset)')
-# plt.xlabel('In-Degree')
-# plt.ylabel('Frequency (log scale)')
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+plt.hist(in_degrees, bins=50, log=True, color='skyblue', edgecolor='black')
+plt.title('In-Degree Distribution (huge dataset)')
+plt.xlabel('In-Degree')
+plt.ylabel('Frequency (log scale)')
 
-# plt.subplot(1, 2, 2)
-# plt.hist(out_degrees, bins=50, log=True, color='salmon', edgecolor='black')
-# plt.title('Out-Degree Distribution (huge dataset)')
-# plt.xlabel('Out-Degree')
-# plt.ylabel('Frequency (log scale)')
+plt.subplot(1, 2, 2)
+plt.hist(out_degrees, bins=50, log=True, color='salmon', edgecolor='black')
+plt.title('Out-Degree Distribution (huge dataset)')
+plt.xlabel('Out-Degree')
+plt.ylabel('Frequency (log scale)')
 
-# plt.tight_layout()
-# plt.savefig('degree_distribution_huge.png')
-# plt.show()
-# print("End of Question 2.3")
-# --- Question 2.4: Connected components (sampling, huge dataset) ---
+plt.tight_layout()
+plt.savefig('degree_distribution_huge.png')
+plt.show()
+print("End of Question 2.3")
 
-# --- Question 2.4: Sampling-based component analysis for huge dataset ---
-import igraph as ig
-import random
 
 # Parameters for sampling
 sample_size = 10000  # Number of edges to sample
@@ -216,18 +206,18 @@ total_edges = 0
 
 # First, count total edges
 with open(path, "r") as f:
-	for _ in f:
-		total_edges += 1
+    for _ in f:
+        total_edges += 1
 
 # Randomly select line numbers to sample
 sample_indices = set(random.sample(range(total_edges), min(sample_size, total_edges)))
 
 # Read and collect sampled edges
 with open(path, "r") as f:
-	for idx, line in enumerate(f):
-		if idx in sample_indices:
-			src, dst = line.strip().split("\t")[:2]
-			sampled_edges.append((src, dst))
+    for idx, line in enumerate(f):
+        if idx in sample_indices:
+            src, dst = line.strip().split("\t")[:2]
+            sampled_edges.append((src, dst))
 
 # Build igraph from sampled edges
 g_sample = ig.Graph(directed=True)
@@ -248,3 +238,4 @@ largest_strong = strong_components.giant()
 print(f"Sampled: Number of strongly connected components: {num_strong}")
 print(f"Sampled: Largest strongly connected component: {largest_strong.vcount()} nodes, {largest_strong.ecount()} edges")
 print("End of Question 2.4 (sampled)")
+
